@@ -28,10 +28,6 @@
             Classes.Library library = new Classes.Library(users, books, dvds);
 
             library.UnloggedPage();
-
-
         }
-
-  
     }
 }

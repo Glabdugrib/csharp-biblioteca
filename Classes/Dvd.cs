@@ -15,5 +15,12 @@ namespace csharp_biblioteca.Classes
             SerialNumber = serialNumber;
             Duration = duration;
         }
+
+        public override void printInfo()
+        {
+            base.printInfo();
+            Console.WriteLine($"Serial number: {SerialNumber}");
+            Console.WriteLine($"Duration: {Duration}");
+        }
     }
 }

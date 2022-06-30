@@ -115,7 +115,7 @@ namespace csharp_biblioteca.Classes
                     this.SearchBook();
                     break;
                 case 2:
-                    // aggiungere
+                    this.SearchDvd();
                     break;
                 case 3:
                     this.ViewRentals();
@@ -234,7 +234,7 @@ namespace csharp_biblioteca.Classes
                     this.BorrowBook(book);
                     break;
                 case 3:
-                    this.ReturnDocument(book);
+                    this.ReturnBook(book);
                     break;
                 case 4:
                     this.SearchBook();
@@ -291,11 +291,179 @@ namespace csharp_biblioteca.Classes
             this.LoggedPage();
         }
 
-        private void ReturnDocument(Document document)
+        private void ReturnBook(Book book)
         {
-            document.State = "available";
-            Console.WriteLine($"\nThe document '{document.Title}' has been returned successfully!");
+            book.State = "available";
+
+            Rental rentalToDelete = null;
+
+            foreach (Rental rental in UserLogged.getRentals())
+            {
+                if(rental.Document.Title == book.Title)
+                {
+                    rentalToDelete = rental;
+                }
+            }
+            UserLogged.getRentals().Remove(rentalToDelete);
+
+            Console.WriteLine($"\nThe book '{book.Title}' has been returned successfully!");
             this.LoggedPage();
+        }
+
+        private void ReturnDvd(Dvd dvd)
+        {
+            dvd.State = "available";
+
+            Rental rentalToDelete = null;
+
+            foreach (Rental rental in UserLogged.getRentals())
+            {
+                if (rental.Document.Title == dvd.Title)
+                {
+                    rentalToDelete = rental;
+                }
+            }
+            UserLogged.getRentals().Remove(rentalToDelete);
+
+            Console.WriteLine($"\nThe dvd '{dvd.Title}' has been returned successfully!");
+            this.LoggedPage();
+        }
+
+        private void SearchDvd()
+        {
+            Console.WriteLine($"\n* SEARCH DVD *\n");
+            Console.WriteLine($"1. Search by serial number");
+            Console.WriteLine($"2. Search by title");
+            Console.WriteLine($"3. Back");
+            Console.WriteLine($"4. Exit\n");
+
+            int input = Convert.ToInt32(Console.ReadLine());
+
+            switch (input)
+            {
+                case 1:
+                    this.SearchDvdBySerial();
+                    break;
+                case 2:
+                    this.SearchDvdByTitle();
+                    break;
+                case 3:
+                    this.LoggedPage();
+                    break;
+                case 4:
+                    return;
+                    break;
+            }
+        }
+
+        private void SearchDvdBySerial()
+        {
+            Console.WriteLine($"\n* SEARCH DVD *\n");
+            Console.Write($"Insert serial number: ");
+            string serial = Console.ReadLine();
+
+            bool foundDvd = false;
+
+            foreach (Dvd dvd in Dvds)
+            {
+                if (dvd.SerialNumber == serial)
+                {
+                    foundDvd = true;
+                    this.DvdInfo(dvd);
+                }
+            }
+
+            if (!foundDvd)
+            {
+                Console.WriteLine("\nDvd not found.");
+                this.SearchBook();
+            }
+        }
+
+        private void SearchDvdByTitle()
+        {
+            Console.WriteLine($"\n* SEARCH DVD *\n");
+            Console.Write($"Insert title: ");
+            string title = Console.ReadLine();
+
+            bool foundDvd = false;
+
+            foreach (Dvd dvd in Dvds)
+            {
+                if (dvd.Title == title)
+                {
+                    foundDvd = true;
+                    this.DvdInfo(dvd);
+                }
+            }
+
+            if (!foundDvd)
+            {
+                Console.WriteLine("\nDvd not found.");
+                this.SearchBook();
+            }
+        }
+
+        private void DvdInfo(Dvd dvd)
+        {
+            Console.WriteLine($"\n* DVD MENU *\n");
+            Console.WriteLine($"1. View info");
+            Console.WriteLine($"2. Borrow dvd");
+            Console.WriteLine($"3. Return dvd");
+            Console.WriteLine($"4. Back");
+            Console.WriteLine($"5. Exit\n");
+
+            int input = Convert.ToInt32(Console.ReadLine());
+
+            switch (input)
+            {
+                case 1:
+                    dvd.printInfo();
+                    Console.WriteLine();
+                    this.DvdInfo(dvd);
+                    break;
+                case 2:
+                    this.BorrowDvd(dvd);
+                    break;
+                case 3:
+                    this.ReturnDvd(dvd);
+                    break;
+                case 4:
+                    this.SearchBook();
+                    break;
+                case 5:
+                    return;
+                    break;
+            }
+        }
+
+        private void BorrowDvd(Dvd dvd)
+        {
+            if (dvd.State == "available")
+            {
+                Console.WriteLine($"\n* BORROW DVD *\n");
+
+                Console.Write($"Start date: ");
+                string startDate = Console.ReadLine();
+                Console.Write($"End date: ");
+                string endDate = Console.ReadLine();
+
+                // crea prestito
+                Rental rental = new Rental(dvd, UserLogged, startDate, endDate);
+
+                // aggiungi prestito alla lista di prestiti dell'utente
+                UserLogged.getRentals().Add(rental);
+
+                dvd.State = "borrowed";
+                Console.WriteLine($"\nYou have successfully borrowed the dvd!\n");
+
+                this.LoggedPage();
+            }
+            else
+            {
+                Console.WriteLine($"\nThe dvd is not available!\n");
+                this.DvdInfo(dvd);
+            }
         }
     }
 }
