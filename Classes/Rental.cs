@@ -10,15 +10,20 @@ namespace csharp_biblioteca.Classes
     {
         public Document Document { get; set; }
         public User User { get; set; }
-        public DateTime StardDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public String StartDate { get; set; }
+        public String EndDate { get; set; }
 
-        public Rental(Document document, User user, DateTime startDate, DateTime endDate)
+        public Rental(Document document, User user, String startDate, String endDate)
         {   
             Document = document;
             User = user;
-            StardDate = startDate;
+            StartDate = startDate;
             EndDate = endDate;
+        }
+
+        public void printInfo()
+        {
+            Console.WriteLine($"\nThe document '{Document.Title}' is borrowed from {StartDate} to {EndDate}");
         }
     }
 }

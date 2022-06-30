@@ -14,6 +14,13 @@ namespace csharp_biblioteca.Classes
         public string Password { get; set; }
         public string Telephone { get; set; }
 
+        private List<Rental> rentals = new List<Rental>();
+
+        public List<Rental> getRentals()
+        {
+            return this.rentals;
+        }
+
         public User(string surname, string name, string email, string password, string telephone)
         {
             Surname = surname;
@@ -21,24 +28,6 @@ namespace csharp_biblioteca.Classes
             Email = email;
             Password = password;
             Telephone = telephone;
-        }
-
-        public void Borrow(Document document)
-        {
-            if(document.State == "available")
-            {
-                document.State = "borrowed";
-                Console.WriteLine("\nDocument successfully borrowed!");
-            }
-            else
-            {
-                Console.WriteLine("\nThe document is not available.");
-            }
-        }
-
-        public void ReturnDocument(Document document)
-        {
-            document.State = "available";
         }
     }
 }

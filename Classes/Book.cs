@@ -16,5 +16,12 @@ namespace csharp_biblioteca.Classes
             Isbn = isbn;
             PageNum = pageNum;
         }
+
+        public override void printInfo()
+        {
+            base.printInfo();
+            Console.WriteLine($"Isbn: {Isbn}");
+            Console.WriteLine($"Page number: {PageNum}");
+        }
     }
 }

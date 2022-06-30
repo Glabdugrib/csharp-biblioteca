@@ -24,5 +24,15 @@ namespace csharp_biblioteca.Classes
             Shelf = shelf;
             Author = author;
         }
+
+        public virtual void printInfo()
+        {
+            Console.WriteLine($"\nTitle: {Title}");
+            Console.WriteLine($"Year: {Year}");
+            Console.WriteLine($"Sector: {Sector}");
+            Console.WriteLine($"State: {State}");
+            Console.WriteLine($"Shelf: {Shelf}");
+            Console.WriteLine($"Author: {Author}");
+        }
     }
 }
